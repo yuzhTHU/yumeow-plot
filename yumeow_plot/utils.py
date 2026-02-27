@@ -51,7 +51,7 @@ def load_zh_font(
 
     if not os.path.exists(font_path):
         import requests
-        font_path="/tmp/SimHei.otf",
+        font_path="/tmp/SimHei.otf"
         if not os.path.exists(font_path):
             response = requests.get(font_url)
             response.raise_for_status()  # 确保请求成功

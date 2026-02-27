@@ -5,18 +5,18 @@ import types
 import numpy as np
 import matplotlib.pyplot as plt
 from typing import Optional
-from functools import partial
+from functools import partial, update_wrapper
 from .layout import calculate_size, get_side_rect, get_margin_rect
 from .utils import get_my_rc, cm_to_inch, pt_to_inch
 
-def get_my_fig(
+def get_fig(
     RN: int,
     CN: int,
     FW: Optional[float] = None,
     FH: Optional[float] = None,
     AW: Optional[float] = None,
     AH: Optional[float] = None,
-    A_ratio: Optional[float] = None,
+    A_ratio: Optional[float] = 1.0,
     LM: float = 3.0,
     RM: float = 3.0,
     TM: float = 3.0,
@@ -24,8 +24,8 @@ def get_my_fig(
     HS: float = 3.0,
     VS: float = 3.0,
     dpi: int = 300,
-    fontsize: float = 7,
-    lw: float = 0.5,
+    fontsize: float = 14,
+    lw: float = 1,
     font_family: str = 'Arial',
     **kwargs
 ):
@@ -74,11 +74,6 @@ def get_my_fig(
         left_box=(0, BM/FH, LM/FW, 1-(TM+BM)/FH),
     )
 
-    fig.get_margin_rect = partial(get_margin_rect, figinfo=figinfo)
-
-    for ax in axes:
-        ax.get_side_rect = partial(get_side_rect, ax, figinfo=figinfo)
-
     # 使用 rc_context 局部应用样式，防止污染全局 plt.rcParams
     with plt.rc_context(rc_params):
         fig, axes = plt.subplots(RN, CN, figsize=(FW, FH), dpi=dpi, **kwargs)
@@ -89,7 +84,12 @@ def get_my_fig(
         )
         axes = axes.ravel() if RN * CN > 1 else [axes]
         fig.figinfo = figinfo  # 附加尺寸信息到 fig 对象
-    
+
+    fig.get_margin_rect = update_wrapper(partial(get_margin_rect, figinfo=figinfo), get_margin_rect)
+
+    for ax in axes:
+        ax.get_side_rect = update_wrapper(partial(get_side_rect, ax, figinfo=figinfo), get_side_rect)
+
     return fig, axes
 
 
@@ -123,12 +123,12 @@ def merge_axes(axes, fig=None, label=None):
     # 5. 自动注入空间感应方法
     if hasattr(axes[0], 'get_side_rect'):
         old_partial = axes[0].get_side_rect
-        # 重新创建一个 partial，把第一个参数替换为新的 merged_ax
-        # old_partial.keywords 里存着之前的 figinfo=figinfo
-        merged_ax.get_side_rect = partial(
-            get_side_rect, 
-            merged_ax,      # 关键：替换为新轴
-            **old_partial.keywords
-        )
+        
+        # 使用 update_wrapper 包装新的 partial 对象
+        # 1. 重新绑定到 merged_ax
+        # 2. 从 get_side_rect 继承文档字符串和元数据
+        merged_ax.get_side_rect = update_wrapper(partial(
+            get_side_rect, merged_ax, **old_partial.keywords
+        ), get_side_rect)
 
     return merged_ax

@@ -23,35 +23,11 @@ def calculate_size(RN, CN, FW, FH, AW, AH, A_ratio, LM, RM, TM, BM, HS, VS, font
     HS, VS : float, optional
         子图之间的水平间距 (Horizontal Spacing) 和垂直间距 (Vertical Spacing)。
         默认与 LM/TM 保持一致。
-    dpi : int, default 300
-        图像分辨率，常用于保存高质量论文插图。
     fontsize : float, default 7
         基础字体大小 (pt)，学术论文（如 Nature/IEEE）通常建议在 5-9pt 之间。
-    lw : float, default 0.5
-        基础线宽 (pt)，包括轴线、刻度线、网格线等。
-    gridspec : bool, default False
-        是否返回 `matplotlib.gridspec.GridSpec` 对象。
-        - True: 返回 (figinfo, fig, gs)
-        - False: 返回 (figinfo, fig, axes)
-    **kwargs : dict
-        传递给 `plt.subplots` 或 `plt.figure` 的其他参数（如 facecolor, font_family 等）。
 
-    Retu
-    figinfo : dict
-        包含所有计算后的物理尺寸信息（单位：inch）和布局框坐标（单位：比例）。
-        可用于后续在画布特定区域添加文字或标注。
-    fig : matplotlib.figure.Figure
-        生成的画布对象。
-    axes : list of matplotlib.axes.Axes 或 matplotlib.gridspec.GridSpec
-        展开后的子图列表或布局管理器。
-
-    示例
-    -------
-    >>> # 指定总宽 15cm，子图高度自动计算
-    >>> info, fig, axes = get_fig(1, 2, FW=15, A_ratio=1.5)
-    
-    >>> # 指定单个子图宽度 4cm 和总高度
-    >>> info, fig, axes = get_fig(2, 2, AW=4, FH=10)
+    Returns:
+    解算后的尺寸参数 (RN, CN, FW, FH, AW, AH, A_ratio, LM, RM, TM, BM, HS, VS)
     """    
     # 转换单位：cm -> inch (只针对外部输入的物理尺寸)
     FW, FH, AW, AH = map(cm_to_inch, [FW, FH, AW, AH])
