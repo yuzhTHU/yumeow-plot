@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "yumeow-plot"
-version = "0.1.0"
+version = "0.1.1"
 description = "YuMeow's personal matplotlib wrappers for academic and daily use."
 authors = [{name = "YuMeow", email = "yumeow@126.com"}]
 readme = "README.md"
