@@ -1,0 +1,24 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "yumeow-plot"
+version = "0.1.0"
+description = "YuMeow's personal matplotlib wrappers for academic and daily use."
+authors = [{name = "YuMeow", email = "yumeow@126.com"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "requests",
+]
+
+[project.urls]
+Homepage = "https://github.com/yuzhTHU/yumeow-plot"
