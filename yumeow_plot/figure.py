@@ -1,3 +1,6 @@
+# Copyright (c) 2026 YuMeow
+# Licensed under the MIT License
+
 import types
 import numpy as np
 import matplotlib.pyplot as plt
