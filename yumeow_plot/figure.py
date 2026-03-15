@@ -98,7 +98,7 @@ def merge_axes(axes, fig=None, label=None):
     合并一组 axes 为一个大的 axis。
     支持传入 Axes 列表或 NumPy 矩阵。
     """
-    if not axes: return None
+    if len(axes) == 0: return None
     
     # 确保 axes 是扁平化的数组，兼容 list 和 np.ndarray
     axes = np.asarray(axes).ravel()
